@@ -15,7 +15,7 @@ struct customer {
 typedef struct customer client;//客户结构体
 struct workers {
 	int num;//员工工号
-	char area;//服务区域
+	int dp_num;//所管理房屋编号
 	int serviceNum;//服务对象的数量
 	struct workers* next;
 };
@@ -38,11 +38,12 @@ typedef struct VIP vip;//会员结构体
 void house_init(void);
 void mainMenu(void);
 void menuSelect(void);
-int search(void);
+int search(void);//空屋查询模块
 client* create(int);
 client* clientOrder(client*, client*);
-int Pass_word(void);
-void checkDp(int);
+int Pass_word(void);//密码校验模块
+void vip_manage(void);//VIP管理模块
+void checkDp(int);//公寓管理模块
 
 int main(void)
 {
@@ -90,6 +91,9 @@ void menuSelect(void) {
 			printf("Please enter the number of the department you want to check:");
 			scanf("%d", &a);
 			checkDp(a);
+			break;
+		case 3:
+			vip_manage();
 			break;
 		case 4:
 			Pass_word();
