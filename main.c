@@ -8,7 +8,7 @@ int pword = 140816;//6位数字密码
 struct customer {
 	int num;//住户编号
 	int age;//住户年龄
-	char gender;//M for male,F for famale
+	int gender;
 	int house;//所住房屋编号
 	struct customer* next;
 };
@@ -67,7 +67,6 @@ void mainMenu() {
 	printf("Elderly community service system\n");
 	printf("********************************\n");
 	printf("1.Client management\n2.Department management\n3.VIP management\n4.Staff management\n5.Exit\n\n");
-	printf("Please choose the function:");
 }
 void menuSelect(void) {
 	client* head;
@@ -78,8 +77,10 @@ void menuSelect(void) {
 	int i = 1;
 	int a;//房屋编号
 	system("cls");
+	mainMenu();
 	do {
-		mainMenu();
+	        printf("Please choose the function number:");
+                fflush(stdin);
 		scanf("%d", &choose);
 		switch (choose) {
 		case 1:
@@ -94,9 +95,6 @@ void menuSelect(void) {
 			printf("Please enter the number of the department you want to check:");
 			scanf("%d", &a);
 			checkDp(a);
-			break;
-		case 3:
-			vip_manage(vp);
 			break;
 		case 4:
 			Pass_word();
@@ -131,12 +129,12 @@ client* create(int result) {
 	client* p;
 	p = (client*)malloc(sizeof(client));
 	int i, num, age, house;
-	char gender;
+	int gender;
 	if (result != -1) {
 		p->house = result;
 		dp[result - 1].situation = 1;
-		printf("Please input the client's number,age and gender(M for male/F for famale).\n");
-		scanf("%d%d%c", &num, &age, gender);
+		printf("Please input the client's number,age and gender(1 for male/2 for famale).\n");
+		scanf("%d%d%d", &num, &age, &gender);
 		p->num = num;
 		p->age = age;
 		p->gender = gender;
@@ -196,5 +194,5 @@ int Pass_word() {
 	return 0;
 }
 void exit(){
-	printf("System is shutting down.\n");
+    printf("System is shutting down.\n");
 }
