@@ -44,6 +44,7 @@ client* clientOrder(client*, client*);
 int Pass_word(void);
 void checkDp(int);
 vip* vip_manage(vip*);
+void exit(void);
 
 int main(void)
 {
@@ -101,7 +102,7 @@ void menuSelect(void) {
 			Pass_word();
 			break;
 		case 5:
-			exit(1);
+			exit();
 			break;
 		}
 	} while (i);
@@ -194,4 +195,6 @@ int Pass_word() {
 	} while (getchar() == 'y' || getchar() == 'Y');
 	return 0;
 }
-
+void exit(){
+	printf("System is shutting down.\n");
+}
