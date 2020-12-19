@@ -3,6 +3,7 @@
 #include<string.h>
 
 #define H 7
+#define V 3
 
 int pword = 140816;//6位数字密码
 struct customer {
@@ -31,9 +32,7 @@ struct VIP {
 	int ID;//会员编号
 	int age;//年龄
 	int houseNum;//所居住房屋编号
-	struct VIP* next;
-};
-typedef struct VIP vip;//会员结构体
+}vip[V];
 
 void house_init(void);
 void mainMenu(void);
