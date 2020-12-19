@@ -1,5 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
+#include<string.h>
+
 #define H 7
 
 int pword = 140816;//6位数字密码
@@ -38,8 +40,9 @@ void mainMenu(void);
 void menuSelect(void);
 int search(void);
 client* create(int);
-client* clientOrder(client*,client*);
+client* clientOrder(client*, client*);
 int Pass_word(void);
+void checkDp(int);
 
 int main(void)
 {
@@ -61,14 +64,15 @@ void mainMenu() {
 	printf("********************************\n");
 	printf("Elderly community service system\n");
 	printf("********************************\n");
-	printf("1.Client management\n2.Department management\n3.VIP management\n4.Staff management\n5.Exit\n");
+	printf("1.Client management\n2.Department management\n3.VIP management\n4.Staff management\n5.Exit\n\n");
 	printf("Please choose the function:");
 }
 void menuSelect(void) {
 	client* head;
 	head = NULL;
-	int choose,result;
+	int choose, result;
 	int i = 1;
+	int a;//房屋编号
 	system("cls");
 	do {
 		mainMenu();
@@ -77,14 +81,19 @@ void menuSelect(void) {
 		case 1:
 			result = search();
 			if (result == 1)
-				printf("This person can check in room %d.\n", result);
+				printf("This person can check in room %d.\n\n", result);
 			else
 				break;
 			head = clientOrder(head, create(result));
 			break;//客户管理模块
+		case 2:
+			printf("Please enter the number of the department you want to check:");
+			scanf("%d", &a);
+			checkDp(a);
+			break;
 		case 4:
 			Pass_word();
-			break;//员工管理模块
+			break;
 		case 5:
 			exit(1);
 			break;
@@ -95,11 +104,11 @@ int search(void) {
 	int customNum;
 	customNum = 0;
 	int i;
-	int MaxCapacity = 5;
+	int MaxCapacity = 2;
 	printf("Please enter the number of the client:\n");
 	scanf("%d", &customNum);
 	if (MaxCapacity < customNum) {
-		printf("Sorry,there is no room for %d people!\n", customNum);
+		printf("Sorry,there is no room for %d people!\n\n", customNum);
 		return -1;
 	}
 	while (customNum <= MaxCapacity) {
@@ -148,21 +157,34 @@ client* clientOrder(client* head, client* p) {
 	}
 	return head;
 }
+void checkDp(int a) {
+	int j;
+	for (j = 0; j < H; j++) {
+		if (dp[j].number == a) {
+			if (dp[j].situation == 1) {
+				printf("The room %d is occupied by %d people.\n", dp[j].number, dp[j].capacity);
+			}
+			else if (dp[j].situation == 0) {
+				printf("The room %d is empty.\n", dp[j].number);
+			}
+		}
+	}
+}
 int Pass_word() {
-    int password;
-    do {
-        printf("Please enter a 6-digit password:\n");
-        scanf("%d", &password);
-        if (pword == password) {
-            printf("****************************************\n");
-            printf(" Welcome to the staff management system\n");
-            printf("****************************************\n");
-            return 1;
-        }
-        else {
-            printf("Wrong password!Please enter again.\n");
-            printf("Input again or not('Y' for yes):\n");
-        }
-    } while (getchar() == 'y' || getchar() == 'Y');
-    return 0;
+	int password;
+	do {
+		printf("Please enter a 6-digit password:\n");
+		scanf("%d", &password);
+		if (pword == password) {
+			printf("****************************************\n");
+			printf(" Welcome to the staff management system\n");
+			printf("****************************************\n");
+			return 1;
+		}
+		else {
+			printf("Wrong password!Please enter again.\n");
+			printf("Input again or not('Y' for yes):\n");
+		}
+	} while (getchar() == 'y' || getchar() == 'Y');
+	return 0;
 }
