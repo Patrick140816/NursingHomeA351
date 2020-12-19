@@ -31,9 +31,12 @@ struct VIP {
 	int ID;//会员编号
 	int age;//年龄
 	int houseNum;//所居住房屋编号
-	struct VIP* next;
 };
 typedef struct VIP vip;//会员结构体
+struct node{
+    vip stdinfo;
+    struct node *next;
+};typedef struct node NODE;
 
 void house_init(void);
 void mainMenu(void);
@@ -43,7 +46,13 @@ client* create(int);
 client* clientOrder(client*, client*);
 int Pass_word(void);
 void checkDp(int);
-vip* vip_manage(vip*);
+NODE *create_vip(int *p_n,int *p_max);
+NODE *add_vip(NODE *tail,NODE *new_vip);
+void show_vip(NODE *head);
+NODE *search_vip(NODE *head,int keyno);
+NODE *delect_vip(NODE *head,int keyno,int *n);
+void show_avip(vip v);
+void vip_manage();
 void exit(void);
 
 int main(void)
@@ -79,8 +88,8 @@ void menuSelect(void) {
 	system("cls");
 	mainMenu();
 	do {
-	        printf("Please choose the function number:");
-                fflush(stdin);
+	    printf("Please choose the function number:");
+        fflush(stdin);
 		scanf("%d", &choose);
 		switch (choose) {
 		case 1:
@@ -95,6 +104,9 @@ void menuSelect(void) {
 			printf("Please enter the number of the department you want to check:");
 			scanf("%d", &a);
 			checkDp(a);
+			break;
+		case 3:
+			vip_manage();
 			break;
 		case 4:
 			Pass_word();
@@ -192,6 +204,127 @@ int Pass_word() {
 		}
 	} while (getchar() == 'y' || getchar() == 'Y');
 	return 0;
+}
+ NODE *create_vip(int *p_n,int *p_max){
+     NODE *p;
+     vip v;
+     p=(NODE *)malloc(sizeof(vip));
+     if(p!=NULL){
+        v.ID=*p_max;
+        printf("age:");
+        scanf("%d",v.age);
+        printf("house number:");
+        scanf("%d",v.houseNum);
+        (*p_n)++;
+        (*p_max)++;
+        p->stdinfo=v;
+        p->next=NULL;
+        }
+        return p;
+}
+
+NODE *add_vip(NODE *tail,NODE *new_vip){
+    if(tail)
+        tail->next=new_vip;
+    return new_vip;
+}
+
+void show_vip(NODE *head){
+    NODE *p=head;
+    if(p==NULL)
+        printf("No data!\n");
+    while(p){
+        show_avip(p->stdinfo);
+        p=p->next;
+    }
+
+}
+void show_avip(vip v){
+    printf("ID:%d\n",v.ID);
+    printf("age:%d\n",v.age);
+    printf("houseNum:%d\n",v.houseNum);
+    }
+
+NODE *search_vip(NODE *head,int keyno){
+    NODE *p=head;
+    while(p)
+    if(p->stdinfo.ID==keyno){
+        break;
+    }
+    p=p->next;
+
+    if(p==NULL)
+        printf("NO vip with ID %d\n",keyno);
+    return p;
+}
+NODE *delect_vip(NODE *head,int keyno,int *p_n){
+    NODE *pre=head,*result=head;
+    if(!head){
+        printf("the link is empty!\n");
+        return NULL;
+    }
+    while(result){
+        if(result->stdinfo.ID!=keyno){
+            pre=result;
+            result=result->next;
+        }else
+                break;
+    }
+    if(result){
+        if(result==head){
+                head=result->next;
+        }else{
+            pre->next=result->next;
+        }
+        free(result);
+        (*p_n)--;
+        printf("Delet is done!\n");
+    }else{
+        printf("No vip with ID %d!\n",keyno);
+    }
+    return head;
+}
+void vip_manage(){
+    int choice;
+    NODE *head=NULL,*tail=NULL;
+    int n=0,max=1,keyno;
+    int i=1;
+    do{
+        printf("enter 1:create vip\n");
+        printf("enter 2:show vip\n");
+        printf("enter 3:search vip\n");
+        printf("enter 4:delect vip\n");
+        printf("enter 0:break\n");
+        fflush(stdin);
+        scanf("%d",&choice);
+        switch(choice){
+            case 0:
+                printf("bye");
+                break;
+            case 1:
+                 if(head==NULL){
+                    head=create_vip(&n,&max);
+                    tail=head;
+                 }
+                 else{
+                    tail=add_vip(tail,create_vip(&n,&max));
+                 }
+                 break;
+             case 2:
+                 show_vip(head);
+                 break;
+             case 3:
+                 printf("enter a vip ID:");
+                 scanf("%d",&keyno);
+                 search_vip(head,keyno);
+                 break;
+             case 4:
+                 printf("enter a vip ID:");
+                 scanf("%d",&keyno);
+                 head=delect_vip(head,keyno,&n);
+                 break;
+         }
+    }while(i);
 }
 void exit(){
     printf("System is shutting down.\n");
