@@ -3,7 +3,6 @@
 #include<string.h>
 
 #define H 7
-#define V 3
 
 int pword = 140816;//6位数字密码
 struct customer {
@@ -16,7 +15,7 @@ struct customer {
 typedef struct customer client;//客户结构体
 struct workers {
 	int num;//员工工号
-	int dp_num;//所管理房屋编号
+	int dp_num;//所管理房屋的编号
 	int serviceNum;//服务对象的数量
 	struct workers* next;
 };
@@ -32,17 +31,19 @@ struct VIP {
 	int ID;//会员编号
 	int age;//年龄
 	int houseNum;//所居住房屋编号
-}vip[V];
+	struct VIP* next;
+};
+typedef struct VIP vip;//会员结构体
 
 void house_init(void);
 void mainMenu(void);
 void menuSelect(void);
-int search(void);//空屋查询模块
+int search(void);
 client* create(int);
 client* clientOrder(client*, client*);
-int Pass_word(void);//密码校验模块
-void vip_manage(void);//VIP管理模块
-void checkDp(int);//公寓管理模块
+int Pass_word(void);
+void checkDp(int);
+void vip_manage(void);
 
 int main(void)
 {
@@ -71,6 +72,8 @@ void menuSelect(void) {
 	client* head;
 	head = NULL;
 	int choose, result;
+	vip* vp;
+	vp = NULL;
 	int i = 1;
 	int a;//房屋编号
 	system("cls");
@@ -92,7 +95,7 @@ void menuSelect(void) {
 			checkDp(a);
 			break;
 		case 3:
-			vip_manage();
+			vip_manage(vp);
 			break;
 		case 4:
 			Pass_word();
@@ -191,3 +194,4 @@ int Pass_word() {
 	} while (getchar() == 'y' || getchar() == 'Y');
 	return 0;
 }
+
