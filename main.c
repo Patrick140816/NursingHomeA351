@@ -39,7 +39,7 @@ void menuSelect(void);
 int search(void);
 client* create(int);
 client* clientOrder(client*,client*);
-int Pass_Word(void);
+int Pass_word(void);
 
 int main(void)
 {
@@ -148,7 +148,7 @@ client* clientOrder(client* head, client* p) {
 	}
 	return head;
 }
-int Pass_Word() {
+int Pass_word() {
     int password;
     do {
         printf("Please enter a 6-digit password:\n");
