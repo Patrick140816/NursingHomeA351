@@ -43,7 +43,7 @@ client* create(int);
 client* clientOrder(client*, client*);
 int Pass_word(void);
 void checkDp(int);
-void vip_manage(void);
+vip* vip_manage(vip*);
 
 int main(void)
 {
