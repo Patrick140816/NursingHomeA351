@@ -2,35 +2,36 @@
 #include<stdio.h>
 #define H 7
 
+int pword = 140816;//6ä½æ•°å­—å¯†ç 
 struct customer {
-	int num;//×¡»§±àºÅ
-	int age;//×¡»§ÄêÁä
+	int num;//ä½æˆ·ç¼–å·
+	int age;//ä½æˆ·å¹´é¾„
 	char gender;//M for male,F for famale
-	int house;//Ëù×¡·¿Îİ±àºÅ
+	int house;//æ‰€ä½æˆ¿å±‹ç¼–å·
 	struct customer* next;
 };
-typedef struct customer client;//¿Í»§½á¹¹Ìå
+typedef struct customer client;//å®¢æˆ·ç»“æ„ä½“
 struct workers {
-	int num;//Ô±¹¤¹¤ºÅ
-	char area;//·şÎñÇøÓò
-	int serviceNum;//·şÎñ¶ÔÏóµÄÊıÁ¿
+	int num;//å‘˜å·¥å·¥å·
+	char area;//æœåŠ¡åŒºåŸŸ
+	int serviceNum;//æœåŠ¡å¯¹è±¡çš„æ•°é‡
 	struct workers* next;
 };
-typedef struct workers staff;//Ô±¹¤½á¹¹Ìå
+typedef struct workers staff;//å‘˜å·¥ç»“æ„ä½“
 
 struct department {
-	int number;//·¿Îİ±àºÅ
-	int situation;//Èë×¡×´Ì¬
-	int capacity;//¿ÉÈë×¡ÈËÊı
-}dp[H] = { {1,0,2},{1,0,2},{1,0,2},{1,0,2},{1,0,1},{1,0,1},{1,0,1} };//¹«Ô¢½á¹¹Ìå
+	int number;//æˆ¿å±‹ç¼–å·
+	int situation;//å…¥ä½çŠ¶æ€
+	int capacity;//å¯å…¥ä½äººæ•°
+}dp[H] = { {1,0,2},{1,0,2},{1,0,2},{1,0,2},{1,0,1},{1,0,1},{1,0,1} };//å…¬å¯“ç»“æ„ä½“
 
 struct VIP {
-	int ID;//»áÔ±±àºÅ
-	int age;//ÄêÁä
-	int houseNum;//Ëù¾Ó×¡·¿Îİ±àºÅ
+	int ID;//ä¼šå‘˜ç¼–å·
+	int age;//å¹´é¾„
+	int houseNum;//æ‰€å±…ä½æˆ¿å±‹ç¼–å·
 	struct VIP* next;
 };
-typedef struct VIP vip;//»áÔ±½á¹¹Ìå
+typedef struct VIP vip;//ä¼šå‘˜ç»“æ„ä½“
 
 void house_init(void);
 void mainMenu(void);
@@ -38,11 +39,12 @@ void menuSelect(void);
 int search(void);
 client* create(int);
 client* clientOrder(client*,client*);
+int Pass_Word(void);
 
 int main(void)
 {
 	house_init();
-	menuSelect();//ÏµÍ³¹¦ÄÜÑ¡Ôñ
+	menuSelect();//ç³»ç»ŸåŠŸèƒ½é€‰æ‹©
 	return 0;
 }
 
@@ -54,7 +56,7 @@ void house_init(void) {
 	dp[4].number = 5; dp[4].situation = 0; dp[4].capacity = 1;
 	dp[5].number = 6; dp[5].situation = 0; dp[5].capacity = 1;
 	dp[6].number = 7; dp[6].situation = 0; dp[6].capacity = 1;
-}//¹«Ô¢Êı¾İ³õÊ¼»¯
+}//å…¬å¯“æ•°æ®åˆå§‹åŒ–
 void mainMenu() {
 	printf("********************************\n");
 	printf("Elderly community service system\n");
@@ -79,10 +81,16 @@ void menuSelect(void) {
 			else
 				break;
 			head = clientOrder(head, create(result));
-			break;//¿Í»§¹ÜÀíÄ£¿é
+			break;//å®¢æˆ·ç®¡ç†æ¨¡å—
+		case 4:
+			Pass_word();
+			break;//å‘˜å·¥ç®¡ç†æ¨¡å—
+		case 5:
+			exit(1);
+			break;
 		}
 	} while (i);
-}//ÏµÍ³¹¦ÄÜÑ¡Ôñ
+}//ç³»ç»ŸåŠŸèƒ½é€‰æ‹©
 int search(void) {
 	int customNum;
 	customNum = 0;
@@ -102,7 +110,7 @@ int search(void) {
 		printf("Sorry,no room avilable now.");
 	}
 	return -1;
-}//¼ìË÷¹«Ô¢
+}//æ£€ç´¢å…¬å¯“
 client* create(int result) {
 	client* p;
 	p = (client*)malloc(sizeof(client));
@@ -139,4 +147,22 @@ client* clientOrder(client* head, client* p) {
 			head = p;
 	}
 	return head;
+}
+int Pass_Word() {
+    int password;
+    do {
+        printf("Please enter a 6-digit password:\n");
+        scanf("%d", &password);
+        if (pword == password) {
+            printf("****************************************\n");
+            printf(" Welcome to the staff management system\n");
+            printf("****************************************\n");
+            return 1;
+        }
+        else {
+            printf("Wrong password!Please enter again.\n");
+            printf("Input again or not('Y' for yes):\n");
+        }
+    } while (getchar() == 'y' || getchar() == 'Y');
+    return 0;
 }
