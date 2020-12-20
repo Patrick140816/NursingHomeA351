@@ -1,6 +1,6 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<string.h>
+#include<math.h>
 
 #define H 7
 
@@ -13,12 +13,13 @@ struct customer {
 	struct customer* next;
 };
 typedef struct customer client;//客户结构体
+
 struct workers {
 	int num;//员工工号
 	int dp_num;//所管理房屋的编号
 	int serviceNum;//服务对象的数量
 	struct workers* next;
-};
+}SA[H];
 typedef struct workers staff;//员工结构体
 
 struct department {
@@ -33,6 +34,7 @@ struct VIP {
 	int houseNum;//所居住房屋编号
 };
 typedef struct VIP vip;//会员结构体
+
 struct node{
     vip stdinfo;
     struct node *next;
@@ -54,6 +56,12 @@ NODE *delect_vip(NODE *head,int keyno,int *n);
 void show_avip(vip v);
 void vip_manage();
 void exit(void);
+void staff_manage(void);
+staff* printfinforlist(staff *head);
+int length(staff *head);
+void push(staff* head);
+staff *createnote(staff*,staff*);
+void staff_manage_init(void);
 
 int main(void)
 {
@@ -71,12 +79,14 @@ void house_init(void) {
 	dp[5].number = 6; dp[5].situation = 0; dp[5].capacity = 1;
 	dp[6].number = 7; dp[6].situation = 0; dp[6].capacity = 1;
 }//公寓数据初始化
+
 void mainMenu() {
 	printf("********************************\n");
 	printf("Elderly community service system\n");
 	printf("********************************\n");
 	printf("1.Client management\n2.Department management\n3.VIP management\n4.Staff management\n5.Exit\n\n");
 }
+
 void menuSelect(void) {
 	client* head;
 	head = NULL;
@@ -110,6 +120,7 @@ void menuSelect(void) {
 			break;
 		case 4:
 			Pass_word();
+			staff_manage();
 			break;
 		case 5:
 			exit();
@@ -117,6 +128,7 @@ void menuSelect(void) {
 		}
 	} while (i);
 }//系统功能选择
+
 int search(void) {
 	int customNum;
 	customNum = 0;
@@ -137,6 +149,7 @@ int search(void) {
 	}
 	return -1;
 }//检索公寓
+
 client* create(int result) {
 	client* p;
 	p = (client*)malloc(sizeof(client));
@@ -155,6 +168,7 @@ client* create(int result) {
 	p->next = NULL;
 	return p;
 }
+
 client* clientOrder(client* head, client* p) {
 	client* pnew;
 	pnew = head;
@@ -174,19 +188,21 @@ client* clientOrder(client* head, client* p) {
 	}
 	return head;
 }
+
 void checkDp(int a) {
 	int j;
 	for (j = 0; j < H; j++) {
 		if (dp[j].number == a) {
 			if (dp[j].situation == 1) {
-				printf("The room %d is occupied by %d people.\n", dp[j].number, dp[j].capacity);
+				printf("The room %d is occupied by %d people.\n\n", dp[j].number, dp[j].capacity);
 			}
 			else if (dp[j].situation == 0) {
-				printf("The room %d is empty.\n", dp[j].number);
+				printf("The room %d is empty.\n\n", dp[j].number);
 			}
 		}
 	}
 }
+
 int Pass_word() {
 	int password;
 	do {
@@ -204,7 +220,8 @@ int Pass_word() {
 		}
 	} while (getchar() == 'y' || getchar() == 'Y');
 	return 0;
-}
+}//密码校验模块
+
  NODE *create_vip(int *p_n,int *p_max){
      NODE *p;
      vip v;
@@ -222,13 +239,11 @@ int Pass_word() {
         }
         return p;
 }
-
 NODE *add_vip(NODE *tail,NODE *new_vip){
     if(tail)
         tail->next=new_vip;
     return new_vip;
 }
-
 void show_vip(NODE *head){
     NODE *p=head;
     if(p==NULL)
@@ -237,13 +252,13 @@ void show_vip(NODE *head){
         show_avip(p->stdinfo);
         p=p->next;
     }
-
 }
+
 void show_avip(vip v){
     printf("ID:%d\n",v.ID);
     printf("age:%d\n",v.age);
     printf("houseNum:%d\n",v.houseNum);
-    }
+}
 
 NODE *search_vip(NODE *head,int keyno){
     NODE *p=head;
@@ -257,6 +272,7 @@ NODE *search_vip(NODE *head,int keyno){
         printf("NO vip with ID %d\n",keyno);
     return p;
 }
+
 NODE *delect_vip(NODE *head,int keyno,int *p_n){
     NODE *pre=head,*result=head;
     if(!head){
@@ -284,6 +300,7 @@ NODE *delect_vip(NODE *head,int keyno,int *p_n){
     }
     return head;
 }
+
 void vip_manage(){
     int choice;
     NODE *head=NULL,*tail=NULL;
@@ -326,6 +343,115 @@ void vip_manage(){
          }
     }while(i);
 }
+
+void staff_manage_init(void){
+    SA[0].num = 001; SA[0].dp_num = 1; SA[0].serviceNum = 2;
+	SA[1].num = 002; SA[1].dp_num = 1; SA[1].serviceNum = 2;
+	SA[2].num = 003; SA[2].dp_num = 1; SA[2].serviceNum = 2;
+	SA[3].num = 004; SA[3].dp_num = 1; SA[3].serviceNum = 2;
+	SA[4].num = 005; SA[4].dp_num = 1; SA[4].serviceNum = 2;
+	SA[5].num = 006; SA[5].dp_num = 1; SA[5].serviceNum = 2;
+	SA[6].num = 007; SA[6].dp_num = 1; SA[6].serviceNum = 2;
+
+}
+
+staff *createnote(staff *head,staff *p){
+      staff *ptr;
+      ptr = (staff*)malloc(sizeof(staff));
+      ptr=head;
+      if(head!=NULL){
+        if(ptr!=NULL){
+            for(int i=0;i<H;i++){
+                ptr->num=SA[i].num;
+                ptr->dp_num=SA[i].dp_num;
+                ptr->serviceNum=SA[i].serviceNum;
+                ptr=ptr->next;
+                if(ptr->next=NULL){
+                    break;
+                }
+            }
+        }
+      }
+      else if(ptr=NULL){
+        ptr=head;
+      }
+      return head;
+}
+void push(staff* head){
+      staff *newstaff=malloc(sizeof(staff));
+      if(newstaff!=NULL){
+        int num1,dp_num1,servicenum1;
+         scanf("%d%d%d",&num1,&dp_num1,&servicenum1);
+         newstaff->num=num1;
+         newstaff->dp_num=dp_num1;
+         newstaff->serviceNum=servicenum1;
+         newstaff->next=head;
+         head=newstaff;
+         return head;
+      }else{
+         printf("error!your establishment fails!");
+         return -1;
+      }
+}
+int length(staff *head){
+     int count=0;
+     staff *current=head;
+     while(current!=NULL){
+        count++;
+        current=current->next;
+     }
+     return(count);
+}
+staff* printfinforlist(staff *head){
+       staff *current=head;
+       int nodenumber;
+       nodenumber=length(head);
+       if(head!=NULL){
+          for(int i=0;i<nodenumber;i++){
+            printf("%d%d%d\n",current->num,current->dp_num,current->serviceNum);
+
+            current=current->next;
+            if(current==NULL){
+                break;
+            }
+          }
+       }
+       return head;
+}
+void staff_manage(void){
+    staff *head=NULL;
+    staff_manage_init();
+    int choice,result;
+    scanf("%d",choice);
+    printf("please input number(1-3)");
+    printf("1:look up the initial information list");
+    printf("2:add up staffs to the list");
+    printf("3:look up the current information list");
+    printf("\n");
+    if(choice==1||choice==2||choice==3){
+        do
+            {switch(choice){
+            case 1:
+                printf("员工编号--------员工服务区域-----员工服务对象--------\n");
+                printf("SA[0].num = 001 SA[0].dp_num = 1 SA[0].serviceNum = 2\n");
+                printf("SA[1].num = 002 SA[1].dp_num = 1 SA[1].serviceNum = 2\n");
+                printf("SA[2].num = 003 SA[2].dp_num = 1 SA[2].serviceNum = 2\n");
+                printf("SA[3].num = 004 SA[3].dp_num = 1 SA[3].serviceNum = 2\n");
+                printf("SA[4].num = 005 SA[4].dp_num = 1 SA[4].serviceNum = 2\n");
+                printf("SA[5].num = 006 SA[5].dp_num = 1 SA[5].serviceNum = 2\n");
+                printf("SA[6].num = 007 SA[6].dp_num = 1 SA[6].serviceNum = 2\n");
+                break;
+            case 2:
+                push(head);
+                break;
+            case 3:
+                printfinforlist(head);
+                break;
+
+        }}while(1);
+    }
+}
+
 void exit(){
     printf("System is shutting down.\n");
 }
